@@ -130,8 +130,8 @@ class _Atoffice2State extends State<Atoffice2> {
     checkdateExpire();
     checkOutTime();
 
-    date1 = ""; //วันเดือน ปีลงเวลา
-    CHECKTIME_serve = "";
+//    date1 = ""; //วันเดือน ปีลงเวลา
+//    CHECKTIME_serve = "";
 
     /* "data": {
     "startdate": CHECKTIME_serve.toString(),
@@ -239,6 +239,8 @@ class _Atoffice2State extends State<Atoffice2> {
     );
     var jsonDecoded = json.decode(response.body);
     var rowsexpire = jsonDecoded['rows'];
+
+//    msg('check response', rowsexpire.toString());
 
     // msg('server resp', 'id_user : ' + id_user + ',' + urlexpire.toString());
 
@@ -644,6 +646,9 @@ class _Atoffice2State extends State<Atoffice2> {
                                 expireStatus.toString().trim());
                             */
                             // expireStatus = [] แสดงว่ายังไม่หมดอายุ
+
+//                            msg('response', expireStatus.toString());
+
                             if (expireStatus.toString().trim() == '[]') {
                               VERIFYCODE = 0; //0=เข้าทำงาน,1=เลิกงาน
                               sendInsert(context); //ส่งค่าทำการบันทึก
