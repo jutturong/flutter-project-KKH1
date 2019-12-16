@@ -3,11 +3,10 @@ import 'dart:collection';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_login_page_ui/dashboard/home.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:poly/poly.dart' as ckPoly;
-import 'package:rflutter_alert/rflutter_alert.dart';
-//import 'package:flutter_login_page_ui/main.dart';
 
 var myKey = "AIzaSyAgKIsFE2QTjmhH_Lq3JVtaXPaKK2Ug_Ds";
 MapView mapView;
@@ -64,6 +63,7 @@ class _MapState extends State<Map> {
     });
   }
 
+  /*
   void _messagebox() {
     Alert(
       context: context,
@@ -84,6 +84,7 @@ class _MapState extends State<Map> {
       ],
     ).show();
   }
+   */
 
   void initState() {
     _getlocation();
@@ -216,11 +217,11 @@ class _MapState extends State<Map> {
         ),
         floatingActionButton: FloatingActionButton(
           tooltip: 'ลงเวลาทำงาน',
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.white,
           child: Icon(
             Icons.person_pin_circle,
-            color: Colors.white,
-            size: 35.0,
+            color: Colors.green,
+            size: 25.0,
           ),
           onPressed:
 //              _incrementCounter, // <-- the state changed on button tap event
@@ -235,7 +236,10 @@ class _MapState extends State<Map> {
 //                Navigator.push(context,
 //                    MaterialPageRoute(builder: (context) => Mainpage()));
 
-                Navigator.pop(context);
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Home()));
+
+//                Navigator.pop(context);
 
                 break;
               case 1:

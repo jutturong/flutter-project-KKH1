@@ -17,7 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-  
+
 
 
   flutter:
@@ -49,6 +49,14 @@ dependencies:
   time_machine:
   timezone: ^0.5.5
   intl: ^0.15.8
+  percent_indicator: ^2.1.1+1
+
+
+
+#  json_listview: ^0.1.0
+#  circular_profile_avatar: ^1.0.2
+
+#  json_listview:
   
 #  timezone: ^0.5.5
 
@@ -87,6 +95,25 @@ flutter:
    - assets/Unknown.png
    - KKH_place.jpg
 
+   - res/images/
+   - res/images/ovo_logo.png
+   - res/images/transfer.png
+   - res/images/scan.png
+   - res/images/user_id.png
+   - res/images/listrik.png
+   - res/images/pulsa.png
+   - res/images/paket_data.png
+   - res/images/pasca_bayar.png
+   - res/images/bpjs.png
+   - res/images/tv_kabel.png
+   - res/images/asuransi.png
+   - res/images/lihat_semua.png
+   - res/images/banner2.png
+   - res/images/banner1.png
+   
+
+#   - packages/timezone/data/latest.tzf
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
@@ -122,3 +149,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
+
+

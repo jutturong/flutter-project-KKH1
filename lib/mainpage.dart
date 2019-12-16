@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:time_machine/time_machine.dart';
@@ -18,6 +22,10 @@ final LocalStorage storage = new LocalStorage('some_key');
 //Map<String, dynamic> data = storage.getItem('stor_fullname');
 
 var strg_fullname = storage.getItem("stor_fullname");
+
+//var strg_empCode = storage.getItem("stor_empCode");
+var strg_empCode = storage.getItem("stor_empCode"); //code ใน employee
+
 var strg_employeeNo = storage.getItem("stor_employeeNo");
 var strg_token = storage.getItem("stor_token");
 //              print( " Storage token response : " + strg_token );
@@ -42,6 +50,13 @@ var now2 = new DateTime.now();
 var y = now2.year;
 var date1 = new DateFormat("yyyy-MM-dd hh:mm:ss").format(now2);
 var now3;
+
+var place_location; //ถ้า place_location=0 จะอยู่นอก,place_location=1 จะอยู่ใน
+var area_status;
+
+int type_go_to_work; //ขึ้นปฏฺิบัติงาน(ปกติ-นอกเวลาราชการ)
+int type_time_stamp; //ประเภทของการลงเวลา(เช้า-บ่าย)
+int type_work_state; //เวร(เช้า-บ่าย)
 
 Future setdate() async {
   try {
@@ -100,8 +115,15 @@ void _onNavigationTap() {
 
 //class Mainpage extends StatelessWidget {
 
+class User {
+  const User(this.name);
+  final String name;
+}
+
 class Mainpage extends StatelessWidget {
 //  String str_fullname = getLogin().toString();
+
+  User selectedUser;
 
   List<DropdownMenuItem<int>> listDrop = [];
   int selected = null;
@@ -110,29 +132,35 @@ class Mainpage extends StatelessWidget {
 
   List<DropdownMenuItem<int>> listDrop3 = [];
 
+  //ขึ้นปฏิบัติงาน(ปกติ-นอกเวลาราชการ)
+  void LoadData3() {
+    listDrop3 = [];
+    listDrop3
+        .add(new DropdownMenuItem(child: new Text('(1)"ปกติ"  '), value: 1));
+    listDrop3.add(
+        new DropdownMenuItem(child: new Text('(2)"นอกเวลา(เวร)"  '), value: 2));
+  }
+
+  //ประเภทของการลงเวลา(เช้า-บ่าย)
   void loadData() {
     listDrop = [];
     listDrop.add(new DropdownMenuItem(
-      child: new Text('"เช้า" ทำงาน'),
+      child: new Text('(1)"เช้า" เข้าทำงาน'),
       value: 1,
     ));
-    listDrop
-        .add(new DropdownMenuItem(child: new Text('"เย็น" เลิกงาน'), value: 2));
-//    listDrop.add(new DropdownMenuItem(child: new Text('B'), value: '3'));
-//    listDrop.add(value)
+    listDrop.add(
+        new DropdownMenuItem(child: new Text('(2)"เย็น" เลิกงาน'), value: 2));
   }
 
+  //เวร(เช้า-บ่าย)
   void LoadData2() {
     listDrop2 = [];
-    listDrop2.add(new DropdownMenuItem(child: new Text('"เช้า"  '), value: 1));
-    listDrop2.add(new DropdownMenuItem(child: new Text('"บ่าย"  '), value: 2));
-  }
-
-  void LoadData3() {
-    listDrop3 = [];
-    listDrop3.add(new DropdownMenuItem(child: new Text('"ปกติ"  '), value: 1));
-    listDrop3
-        .add(new DropdownMenuItem(child: new Text('"นอกเวลา"  '), value: 2));
+    listDrop2.add(new DropdownMenuItem(
+        child: new Text('(1)"อยู่ในเวลาปรกติ"  '), value: 1));
+    listDrop2
+        .add(new DropdownMenuItem(child: new Text('(2)"เวรเช้า"  '), value: 2));
+    listDrop2
+        .add(new DropdownMenuItem(child: new Text('(3)"เวรบ่าย"  '), value: 3));
   }
 
 //  Future<void> setup() async {
@@ -166,8 +194,12 @@ class Mainpage extends StatelessWidget {
 
     if (strg_checkInKKH == true) {
       place_status = "อยู่ภาย 'ใน' พื้นที่";
+//      place_location = 1;
+      area_status = 1;
     } else {
       place_status = "อยู่ภาย 'นอก' พื้นที่";
+//      place_location = 0;
+      area_status = 0;
     }
 
     return MaterialApp(
@@ -384,7 +416,9 @@ class Mainpage extends StatelessWidget {
                     "ชื่อ-นามสกุล,เลขที่เงินเดือน : " +
                         strg_fullname +
                         ',' +
-                        strg_employeeNo,
+                        strg_employeeNo +
+                        ',' +
+                        strg_empCode.toString(),
                     style: TextStyle(
                       fontSize: 18.0,
                       color: Colors.black,
@@ -527,7 +561,7 @@ class Mainpage extends StatelessWidget {
 
               new ListTile(
                 leading: const Icon(
-                  Icons.add_to_queue,
+                  Icons.person_pin_circle,
                   color: Colors.green,
                 ),
                 title: new Text(
@@ -545,7 +579,7 @@ class Mainpage extends StatelessWidget {
 //                    "เวลาปัจจุบัน : ${DateTimeZone.local}",
 //                    "เวลาปัจจุบัน : ${now.inLocalZone().toString('dddd yyyy-MM-dd HH:mm z')}",
 //                    "เวลาปัจจุบัน : " + now2.toLocal().toString(),
-                    "เวลาปัจจุบัน : " + date1,
+                    "เข้าสู่ระบบเวลา : " + date1,
                     style: TextStyle(
                       fontSize: 17.0,
                       color: Colors.green,
@@ -575,6 +609,69 @@ class Mainpage extends StatelessWidget {
                   ]),
 
               Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding:
+                          EdgeInsets.only(left: 10.0, right: 16.0, top: 16.0),
+                    ),
+                    Expanded(
+                      child: new DropdownButton(
+                        iconSize: 15,
+                        elevation: 16,
+                        isExpanded: true,
+                        icon: Icon(
+                          Icons.computer,
+                          color: Colors.black,
+                        ),
+
+                        value: selected,
+                        items: listDrop3,
+                        hint: new Text(
+                          '* ขึ้นปฏิบัติงาน (ปกติ-นอกเวลาราชการ) :  ',
+                          style: TextStyle(
+                            fontSize: 17,
+                            color: Colors.red,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'THSaraban',
+                          ),
+                        ),
+//                        onChanged: (value) => print('you selected $value')
+                        underline: Container(
+                          height: 1,
+                          color: Colors.blue,
+                        ),
+                        onChanged: (int value) {
+//                          int type_go_to_work;
+
+                          setState() {
+//                            return selected value;
+                            return value;
+//                            return type_go_to_work = 4;
+                          }
+
+                          type_go_to_work = value;
+
+                          /*
+                          var alertDialog = AlertDialog(
+                            title: Text('Sever resonse'),
+
+//                            content: Text(value.toString()),
+                            content: Text(type_go_to_work.toString()),
+                          );
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return alertDialog;
+                              });
+                          */
+                        },
+                      ),
+                    )
+                  ]),
+
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -589,17 +686,17 @@ class Mainpage extends StatelessWidget {
                         Icons.contact_mail,
                         color: Colors.black,
                       ),
-                      iconSize: 20,
+                      iconSize: 15,
                       elevation: 16,
                       isDense: false,
                       isExpanded: true,
                       value: selected,
                       items: listDrop,
                       hint: new Text(
-                        'ประเภทของการลงเวลา :  ',
+                        '* ประเภทของการลงเวลา (เช้า-บ่าย) :  ',
                         style: TextStyle(
                           fontSize: 17,
-                          color: Colors.black,
+                          color: Colors.red,
                           fontWeight: FontWeight.w500,
                           fontFamily: 'THSaraban',
                         ),
@@ -609,10 +706,12 @@ class Mainpage extends StatelessWidget {
                         color: Colors.blue,
                       ),
 //                        onChanged: (value) => print('you selected $value')
-                      onChanged: (value) {
+                      onChanged: (int value) {
                         setState() {
-                          return selected = value;
+                          return value;
                         }
+
+                        type_time_stamp = value;
                       },
                     ),
                   ),
@@ -629,7 +728,7 @@ class Mainpage extends StatelessWidget {
                     ),
                     Expanded(
                       child: new DropdownButton(
-                        iconSize: 20,
+                        iconSize: 15,
                         elevation: 16,
                         isExpanded: true,
                         icon: Icon(
@@ -639,10 +738,10 @@ class Mainpage extends StatelessWidget {
                         value: selected,
                         items: listDrop2,
                         hint: new Text(
-                          'เวร :  ',
+                          '* เวร (เช้า-บ่าย) :  ',
                           style: TextStyle(
                             fontSize: 17,
-                            color: Colors.black,
+                            color: Colors.red,
                             fontWeight: FontWeight.w500,
                             fontFamily: 'THSaraban',
                           ),
@@ -652,53 +751,12 @@ class Mainpage extends StatelessWidget {
                           height: 1,
                           color: Colors.blue,
                         ),
-                        onChanged: (value) {
+                        onChanged: (int value) {
                           setState() {
-                            return selected = value;
+                            return value;
                           }
-                        },
-                      ),
-                    )
-                  ]),
 
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding:
-                          EdgeInsets.only(left: 10.0, right: 16.0, top: 16.0),
-                    ),
-                    Expanded(
-                      child: new DropdownButton(
-                        iconSize: 20,
-                        elevation: 16,
-                        isExpanded: true,
-                        icon: Icon(
-                          Icons.computer,
-                          color: Colors.black,
-                        ),
-
-                        value: selected,
-                        items: listDrop3,
-                        hint: new Text(
-                          'ขึ้นปฏิบัติงาน :  ',
-                          style: TextStyle(
-                            fontSize: 17,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'THSaraban',
-                          ),
-                        ),
-//                        onChanged: (value) => print('you selected $value')
-                        underline: Container(
-                          height: 1,
-                          color: Colors.blue,
-                        ),
-                        onChanged: (value) {
-                          setState() {
-                            return selected = value;
-                          }
+                          type_work_state = value;
                         },
                       ),
                     )
@@ -715,16 +773,31 @@ class Mainpage extends StatelessWidget {
 //                        disabledElevation: 3.0,
                   tooltip: 'ลงเวลาทำงาน',
                   child: new Icon(
-                    Icons.add_to_home_screen,
-                    size: 22.0,
-                    color: Colors.green,
+                    Icons.assignment_turned_in,
+                    size: 25.0,
+                    color: Colors.black,
                   ),
-                  backgroundColor: Colors.black,
+                  backgroundColor: Colors.white,
                   onPressed: () {
 //                    Navigator.push(
 //                      context,
 //                      MaterialPageRoute(builder: (context) => prefix0.Map()),
 //                    );
+
+                    /*
+                    var alertDialog = AlertDialog(
+                      title: Text('Response Status'),
+                      content: Text('test..e'),
+                    );
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alertDialog;
+                        });
+                        
+                   */
+
+                    sendValue(context);
                   }),
             ],
           ),
@@ -809,6 +882,103 @@ class Mainpage extends StatelessWidget {
   State<StatefulWidget> createState() {
     // TODO: implement createState
     return null;
+  }
+
+  Future sendValue(BuildContext context) async {
+    //ตัวอย่างการเรียกใช้งาน
+
+    var urlbackend = "http://10.3.42.163:3008/apptime/";
+    var urlbackend2 = "http://10.3.42.163:3008/usertimelog/";
+    final headers = {'Content-Type': 'application/json'};
+
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd hh:mm:ss').format(now);
+
+//    Map<String, dynamic> body = {'username': 'a1631', 'password': 'basic4321'};
+    Map<String, dynamic> body = {
+      "employeeCode": strg_empCode,
+      "employeeNo": strg_employeeNo,
+      "IMEI": strg_gettoIMEI,
+      "simserial": strg_simSerialNumber,
+      "deviceID": strg_deviceId,
+      "timelog": formattedDate
+    };
+    String jsonBody = json.encode(body);
+    final encoding = Encoding.getByName('utf-8');
+    final response = await http.post(
+//      'http://iconnect.kkh.go.th:3008/login/old-user',
+//      'http://10.3.42.21:3008/login/old-user',
+      urlbackend,
+      headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+      body: jsonBody,
+      encoding: encoding,
+    );
+    var jsonDecoded = json.decode(response.body);
+
+    var checkstatus = jsonDecoded['ok'];
+
+    var result = jsonDecoded['result'];
+    var id_head = result.toString().substring(1);
+    var id_user = id_head.toString().replaceAll(new RegExp(']'), '');
+
+    //----ถ้าค่ามีการบันทึกในฐานข้อมูล---------
+    if (checkstatus) {
+//      var _token = jsonDecoded['token'];
+
+      /*
+      var alertDialog = AlertDialog(
+        title: Text('Sever resonse'),
+//        content: Text('' + jsonDecoded.toString() + '=>' + result.toString()),
+//        content: Text(jsonDecoded.toString() + '|' ',' + result.toString() + ',' + id_user.toString()  ),
+        content: Text(id_user.toString()),
+      );
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return alertDialog;
+          });
+     */
+
+//      print('print user_id : ' + id_user.toString());
+
+      Map<String, dynamic> body2 = {
+        "data": {
+          "id_user": id_user.toString(),
+          "place_location": strg_cur_latitude.toString() +
+              "," +
+              strg_cur_longitude.toString(),
+          "area_status": area_status.toString(), //0=นอก,1=ใน
+          "time_stamp_work": date1.toString(),
+
+          "type_go_to_work": type_go_to_work.toString(),
+          "type_time_stamp": type_time_stamp.toString(),
+          "type_work_state": type_work_state.toString(),
+          "timelog": formattedDate.toString()
+        }
+      };
+      String jsonBody2 = json.encode(body2);
+      final response2 = await http.post(
+//      'http://iconnect.kkh.go.th:3008/login/old-user',
+//      'http://10.3.42.21:3008/login/old-user',
+        urlbackend2,
+        headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+        body: jsonBody2,
+        encoding: encoding,
+      );
+      var jsonDecoded2 = json.decode(response2.body);
+
+      var alertDialog = AlertDialog(
+        title: Text('Sever resonse'),
+//        content: Text('' + jsonDecoded.toString() + '=>' + result.toString()),
+//        content: Text(jsonDecoded.toString() + '|' ',' + result.toString() + ',' + id_user.toString()  ),
+        content: Text(jsonDecoded2.toString() + '\n' + body2.toString()),
+      );
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return alertDialog;
+          });
+    }
   }
 
 //  void getText() => print('get test');

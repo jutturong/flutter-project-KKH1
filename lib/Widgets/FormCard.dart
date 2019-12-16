@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+TextEditingController txt_username = new TextEditingController(); //username
+TextEditingController txt_password = new TextEditingController(); //password
+
 class FormCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -25,34 +28,72 @@ class FormCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text("Login",
+//            Icon(
+//              Icons.four_k,
+//              size: 30,
+//              color: Colors.green,
+//            ),
+
+            /*
+            Text("",
                 style: TextStyle(
-                    fontSize: ScreenUtil.getInstance().setSp(45),
+//                    fontSize: ScreenUtil.getInstance().setSp(45),
+                    fontSize: ScreenUtil.getInstance().setSp(35),
                     fontFamily: "Poppins-Bold",
+//                    fontFamily: "THSarabun",
                     letterSpacing: .6)),
+            */
             SizedBox(
               height: ScreenUtil.getInstance().setHeight(30),
+            ),
+            Icon(
+              Icons.person_pin_circle,
+              size: 30,
+              color: Colors.green,
             ),
             Text("Username",
                 style: TextStyle(
                     fontFamily: "Poppins-Medium",
-                    fontSize: ScreenUtil.getInstance().setSp(26))),
+                    fontSize: ScreenUtil.getInstance().setSp(30))),
             TextField(
+              controller: txt_username,
+              obscureText: true,
+//              autofocus: true, //show *
+              cursorWidth: 4.0,
+              cursorRadius: Radius.circular(8.0),
+              cursorColor: Colors.green,
+              maxLength: 10,
+              keyboardType: TextInputType.multiline,
+              textAlign: TextAlign.left,
               decoration: InputDecoration(
-                  hintText: "username",
+                  hintText: "ระบุ Username",
+//                  border: InputBorder.none,
                   hintStyle: TextStyle(color: Colors.grey, fontSize: 12.0)),
             ),
-            SizedBox(
-              height: ScreenUtil.getInstance().setHeight(30),
+
+//            SizedBox(
+//              height: ScreenUtil.getInstance().setHeight(35),
+//            ),
+
+            Icon(
+              Icons.https,
+              size: 20,
+              color: Colors.green,
             ),
             Text("PassWord",
                 style: TextStyle(
                     fontFamily: "Poppins-Medium",
-                    fontSize: ScreenUtil.getInstance().setSp(26))),
+                    fontSize: ScreenUtil.getInstance().setSp(30))),
             TextField(
-              obscureText: true,
+              controller: txt_password,
+              obscureText: true, //password
+
+              cursorWidth: 4.0,
+              cursorRadius: Radius.circular(8.0),
+              cursorColor: Colors.green,
+
               decoration: InputDecoration(
-                  hintText: "Password",
+                  hintText: "ระบุ Password",
                   hintStyle: TextStyle(color: Colors.grey, fontSize: 12.0)),
             ),
             SizedBox(
@@ -61,13 +102,13 @@ class FormCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Text(
-                  "Forgot Password?",
-                  style: TextStyle(
-                      color: Colors.blue,
-                      fontFamily: "Poppins-Medium",
-                      fontSize: ScreenUtil.getInstance().setSp(28)),
-                )
+//                Text(
+//                  "iHospital @KKH โรงพยาบาลขอนแก่น",
+//                  style: TextStyle(
+//                      color: Colors.blue,
+//                      fontFamily: "Poppins-Medium",
+//                      fontSize: ScreenUtil.getInstance().setSp(28)),
+//                )
               ],
             )
           ],
