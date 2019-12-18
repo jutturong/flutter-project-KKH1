@@ -68,10 +68,8 @@ class Home extends StatelessWidget {
 
   void initState() {
     checkToken(context);
-//      print(" Storage token response : " + strg_token);
+//    print(" Storage token response : " + strg_token);
   }
-
-  String senderCreatesJwt() {}
 
   void msgconfigmobile() {
     var alertDialog = AlertDialog(
@@ -377,7 +375,11 @@ class Home extends StatelessWidget {
               Container(
                 height: 50.0,
                 width: 120.0,
+
+                /*
                 child: RaisedButton(
+
+
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(9.0))),
                   child: Text(
@@ -389,20 +391,6 @@ class Home extends StatelessWidget {
                   ),
                   color: Color(0xFF14b8c7),
                   onPressed: () {
-//                    Navigator.push(context, MaterialPageRoute(builder: (context)=>));
-//                    Navigator.pop(context);
-//                    Navigator.pop(context);
-//                    print("logout");
-//                    Navigator.of(context).pop();
-
-//                      Navigator.pop(context);
-//                     Navigator.push(context, MaterialPageRoute(builder: (context)=>main()));
-
-                    /*
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SecondRoute()));
-                   */
-
                     //redirect ออกจากระบบ
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => login.MyApp()));
@@ -410,6 +398,7 @@ class Home extends StatelessWidget {
 //                    msg('response','test');
                   },
                 ),
+                */
               ),
             ],
           ),
@@ -1596,16 +1585,10 @@ class Home extends StatelessWidget {
 //              print("selected Index : $index ");
           switch (index) {
             case 0:
-//                  print("selected Index : $index ");
+              print("selected Index : $index ");
 
               break;
             case 1:
-
-              /*
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LogoutRoute()));
-              */
-
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => login.MyApp()));
 
