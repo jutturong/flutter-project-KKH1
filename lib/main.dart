@@ -95,6 +95,12 @@ var area_status;
 void main() => runApp(MaterialApp(
       home: MyApp(),
       debugShowCheckedModeBanner: false,
+
+      //header
+
+      //payload
+
+      //assinatura
     ));
 
 class MyApp extends StatefulWidget {
