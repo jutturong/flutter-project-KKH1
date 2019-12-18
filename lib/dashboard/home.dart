@@ -8,7 +8,11 @@ import 'package:intl/intl.dart';
 
 var strg_fullname = login.storage.getItem("stor_fullname");
 
+//SECRET_KEY=072f789acfee57e2c542da0d5169b4b8
+const String sharedSecret = '072f789acfee57e2c542da0d5169b4b8';
+
 //var strg_empCode = storage.getItem("stor_empCode");
+
 var strg_empCode = login.storage.getItem("stor_empCode"); //code ใน employee
 
 var strg_employeeNo = login.storage.getItem("stor_employeeNo");
@@ -38,6 +42,8 @@ String formattedDate = DateFormat('yyyy-MM-dd hh:mm:ss').format(now);
 var rountworking =
     new MaterialPageRoute(builder: (BuildContext context) => new SecondRoute());
 
+//var SECRET_KEY = '072f789acfee57e2c542da0d5169b4b8';
+
 final List<String> _listViewData = [
   "A List View with many Text - Here's one!",
   "A List View with many Text - Here's another!",
@@ -53,6 +59,8 @@ class Home extends StatelessWidget {
       checkToken(context);
     }
   }
+
+  String senderCreatesJwt() {}
 
   void msgconfigmobile() {
     var alertDialog = AlertDialog(

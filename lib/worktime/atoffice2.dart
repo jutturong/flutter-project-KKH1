@@ -64,7 +64,7 @@ var CHECKTIME_serve; //เรียกเวลาที่ลงเวลาท
 var totalhours_serve; //จำนวนชั่วโมงในการทำงาน
 
 //http://http://10.3.42.61:3008/checkinout/Badge/4697
-var ip2 = "http://10.3.42.61:3008/";
+var ip2 = "http://10.3.42.163:3008/";
 
 //http://10.3.42.163:3008/checkinout/Badge/4697  =>limit main list
 /*

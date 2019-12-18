@@ -51,7 +51,7 @@ dependencies:
   intl: ^0.15.8
   percent_indicator: ^2.1.1+1
 
-
+  jaguar_jwt: ^2.1.6
 
 #  json_listview: ^0.1.0
 #  circular_profile_avatar: ^1.0.2

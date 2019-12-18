@@ -15,8 +15,6 @@ import 'package:sim_service/models/sim_data.dart';
 import 'Widgets/FormCard.dart';
 import 'dashboard/home.dart';
 
-
-
 //import 'package:localstorage/localstorage.dart';
 
 //import 'package:jaguar_jwt/jaguar_jwt.dart';
@@ -55,6 +53,8 @@ storage.setItem("stor_checkInKKH", "" );
 storage.setItem("stor_str_ans", "" );
 storage.setItem("stor_area_status", "" );
    */
+
+//var SECRET_KEY = '072f789acfee57e2c542da0d5169b4b8';
 
 var url = "http://iconnect.kkh.go.th:3008/login/old-user";
 //var url = "http://iconnect.kkh.go.th:3008/login/old-user";
@@ -488,6 +488,8 @@ class _MyAppState extends State<MyApp> {
     var checkstatus = jsonDecoded['ok']; //check status login
     if (checkstatus) {
       var _token = jsonDecoded['token'];
+
+      print('token : ' + _token);
 
       var alldata = jsonDecoded['data']; //data
       print(' all data : ' + alldata.toString());
