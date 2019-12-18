@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_page_ui/main.dart' as login;
@@ -17,7 +19,7 @@ var strg_empCode = login.storage.getItem("stor_empCode"); //code ใน employee
 
 var strg_employeeNo = login.storage.getItem("stor_employeeNo");
 var strg_token = login.storage.getItem("stor_token");
-//              print( " Storage token response : " + strg_token );
+
 var strg_tokenExpire = login.storage.getItem("stor_tokenExpire");
 var strg_gettoIMEI = login.storage.getItem("stor_gettoIMEI");
 var strg_phoneNumber = login.storage.getItem("stor_phoneNumber");
@@ -39,6 +41,16 @@ var stor_str_ans = login.storage.getItem("stor_str_ans");
 DateTime now = DateTime.now();
 String formattedDate = DateFormat('yyyy-MM-dd hh:mm:ss').format(now);
 
+//Token => https://www.youtube.com/watch?v=BCbO4iRNNsM
+var getToken = ""; //คืนค่า Token จาก login
+
+var header = {
+  "alg": "HS256",
+  "typ": "JWT",
+};
+
+String header64 = jsonEncode(header);
+
 var rountworking =
     new MaterialPageRoute(builder: (BuildContext context) => new SecondRoute());
 
@@ -55,9 +67,8 @@ class Home extends StatelessWidget {
   BuildContext get context => null;
 
   void initState() {
-    initState() {
-      checkToken(context);
-    }
+    checkToken(context);
+//      print(" Storage token response : " + strg_token);
   }
 
   String senderCreatesJwt() {}
@@ -352,13 +363,17 @@ class Home extends StatelessWidget {
           Row(
             children: <Widget>[
               Container(
+
+                  /*
                 padding: EdgeInsets.all(10.0),
                 child: Icon(
                   Icons.refresh,
                   color: Colors.white,
                   size: 40.0,
                 ),
-              ),
+                */
+
+                  ),
               Container(
                 height: 50.0,
                 width: 120.0,
@@ -387,6 +402,12 @@ class Home extends StatelessWidget {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => SecondRoute()));
                    */
+
+                    //redirect ออกจากระบบ
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => login.MyApp()));
+
+//                    msg('response','test');
                   },
                 ),
               ),
@@ -1590,14 +1611,7 @@ class Home extends StatelessWidget {
 
               break;
             case 2:
-
-            /*
-              Navigator.push(context,
-//                  MaterialPageRoute(builder: (context) => LogoutRoute()));
-
-              break;
-               */
-
+              print('ทดสอบ');
           }
         },
 

@@ -96,8 +96,6 @@ void main() => runApp(MaterialApp(
       home: MyApp(),
       debugShowCheckedModeBanner: false,
 
-      //header
-
       //payload
 
       //assinatura
@@ -642,6 +640,8 @@ class _MyAppState extends State<MyApp> {
       storage.setItem("stor_str_ans", str_ans);
       storage.setItem("stor_area_status", area_status);
 
+//      getToken
+
       var strg_checkInKKH = storage.getItem("stor_checkInKKH");
       var strg_str_ans = storage.getItem("stor_str_ans");
       var stor_area_status = storage.getItem("stor_area_status");
@@ -656,6 +656,9 @@ class _MyAppState extends State<MyApp> {
           context, MaterialPageRoute(builder: (context) => Atoff.Atoffice()));
         */
 
+      setState(() {
+        return getToken = _token;
+      });
     } else {
       //login status false
 
