@@ -53,6 +53,9 @@ dependencies:
 
   jaguar_jwt: ^2.1.6
 
+  crypto: ^2.1.4
+
+
 #  jaguar_jwt: ^2.1.6
 
 #  json_listview: ^0.1.0
