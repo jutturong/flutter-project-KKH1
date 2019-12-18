@@ -53,6 +53,8 @@ dependencies:
 
   jaguar_jwt: ^2.1.6
 
+#  jaguar_jwt: ^2.1.6
+
 #  json_listview: ^0.1.0
 #  circular_profile_avatar: ^1.0.2
 
