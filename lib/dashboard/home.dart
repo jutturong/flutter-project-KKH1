@@ -46,13 +46,6 @@ String formattedDate = DateFormat('yyyy-MM-dd hh:mm:ss').format(now);
 //Token => https://www.youtube.com/watch?v=BCbO4iRNNsM
 var getToken = ""; //คืนค่า Token จาก login
 
-var header = {
-  "alg": "HS256",
-  "typ": "JWT",
-};
-
-String header64 = jsonEncode(header);
-
 var rountworking =
     new MaterialPageRoute(builder: (BuildContext context) => new SecondRoute());
 
@@ -1612,6 +1605,24 @@ class Home extends StatelessWidget {
 //              print("selected Index : $index ");
           switch (index) {
             case 0:
+
+              //header
+              var header = {
+                "alg": "HS256",
+                "typ": "JWT",
+              };
+              String header64 = base64Encode(jsonEncode(header).codeUnits);
+              var payload = {
+                "sub": 1,
+                "name": "Rully Hetero",
+                "exp": DateTime.now().millisecondsSinceEpoch + 60000
+              };
+
+              String payload64 = base64Encode(jsonEncode(payload).codeUnits);
+
+              //assinatura
+//              var hmac = (hash, key);
+
               print("selected Index : $index ");
 
               var alertDialog = AlertDialog(
@@ -1620,13 +1631,14 @@ class Home extends StatelessWidget {
 //              side: BorderSide(color: Colors.black)),
                 contentPadding: EdgeInsets.only(top: 0.0),
                 content: Container(
-                  width: 200,
-                  height: 300,
+                  width: 300,
+                  height: 400,
                   child: Column(
                     children: <Widget>[
                       //strg_getTokene
 //                      Text(' content ' + strg_token),
-                      Text(' content ' + strg_getTokene),
+                      //+ strg_getTokene
+                      Text(header64 + payload64),
                     ],
                   ),
                 ),
