@@ -38,6 +38,8 @@ var strg_checkInKKH = login.storage.getItem("stor_checkInKKH");
 var stor_checkInKKH = login.storage.getItem("stor_checkInKKH");
 var stor_str_ans = login.storage.getItem("stor_str_ans");
 
+var strg_getTokene = login.storage.getItem("stor_getToken"); //Token ทั้งหมด
+
 DateTime now = DateTime.now();
 String formattedDate = DateFormat('yyyy-MM-dd hh:mm:ss').format(now);
 
@@ -69,6 +71,31 @@ class Home extends StatelessWidget {
   void initState() {
     checkToken(context);
 //    print(" Storage token response : " + strg_token);
+  }
+
+  Future msg() {
+    var alertDialog = AlertDialog(
+      shape:
+          RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0)),
+//              side: BorderSide(color: Colors.black)),
+      contentPadding: EdgeInsets.only(top: 0.0),
+      content: Container(
+        width: 200,
+        height: 50,
+        child: Column(
+          children: <Widget>[
+            Text(id_user.toString()),
+          ],
+        ),
+      ),
+
+      title: Text('Server response'),
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alertDialog;
+        });
   }
 
   void msgconfigmobile() {
@@ -1586,6 +1613,31 @@ class Home extends StatelessWidget {
           switch (index) {
             case 0:
               print("selected Index : $index ");
+
+              var alertDialog = AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(15.0)),
+//              side: BorderSide(color: Colors.black)),
+                contentPadding: EdgeInsets.only(top: 0.0),
+                content: Container(
+                  width: 200,
+                  height: 300,
+                  child: Column(
+                    children: <Widget>[
+                      //strg_getTokene
+//                      Text(' content ' + strg_token),
+                      Text(' content ' + strg_getTokene),
+                    ],
+                  ),
+                ),
+
+                title: Text('Server response'),
+              );
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return alertDialog;
+                  });
 
               break;
             case 1:

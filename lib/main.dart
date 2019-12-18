@@ -606,6 +606,13 @@ class _MyAppState extends State<MyApp> {
       storage.setItem("stor_cur_latitude", _cur_latitude);
       storage.setItem("stor_cur_longitude", _cur_longitude);
 
+      //Token ทั้งหมด
+
+//      var _token = jsonDecoded['token'];
+//      print('token : ' + _token);
+      //  return getToken = _token;
+      storage.setItem("stor_getToken", _token.toString());
+
       var strg_fullname = storage.getItem("stor_fullname");
 
       var strg_empCode = storage.getItem("stor_empCode");
@@ -621,6 +628,9 @@ class _MyAppState extends State<MyApp> {
 
       var strg_cur_latitude = storage.getItem("stor_cur_latitude");
       var strg_cur_longitude = storage.getItem("stor_cur_longitude");
+
+//      storage.setItem("stor_getToken", _token.toString()  );
+      var strg_getTokene = storage.getItem("stor_getToken");
 
       if (strg_cur_latitude != null && strg_cur_longitude != null) {
         var testPolygon = ckPoly.Polygon(l);
@@ -835,6 +845,8 @@ class _MyAppState extends State<MyApp> {
     storage.setItem("stor_checkInKKH", "");
     storage.setItem("stor_str_ans", "");
     storage.setItem("stor_area_status", "");
+
+//    getToken
 
     var strg_fullname = storage.getItem("stor_fullname");
 
