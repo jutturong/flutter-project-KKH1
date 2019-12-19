@@ -1635,18 +1635,15 @@ class Home extends StatelessWidget {
               String secret = "072f789acfee57e2c542da0d5169b4b8";
               var getTokenvalue = strg_getTokene;
 
-              /*
               var tokens = getTokenvalue.split(".");
               var header64 = tokens[0];
               var payload64 = tokens[1];
-              Map payload = jsonDecode(utf8.decode(base64Decode(payload64)));
-              var sign64 = tokens[2];*/
+//              Map payload = jsonDecode(utf8.decode(base64Decode(payload64)));
+              var sign64 = tokens[2];
 
-              /*
-              var hmac = Hmac(sha256, secret.codeUnits);
-              var digest = hmac.convert("$header64.$payload64".codeUnits);
-              var signGlobal = base64Encode(digest.bytes);
-              */
+//              var hmac = Hmac(sha256, secret.codeUnits);
+//              var digest = hmac.convert("$header64.$payload64".codeUnits);
+//              var signGlobal = base64Encode(digest.bytes);
 
               var alertDialog = AlertDialog(
                 shape: RoundedRectangleBorder(
@@ -1658,9 +1655,8 @@ class Home extends StatelessWidget {
                   height: 400,
                   child: Column(
                     children: <Widget>[
-//                      Text(header64 + " :: " + payload64 + " :: " + sign64),
-//
-                      Text(getTokenvalue)
+                      Text("$header64.$payload64.$sign64"),
+                      //Text(getTokenvalue)
                     ],
                   ),
                 ),
