@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:crypto/crypto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_page_ui/main.dart' as login;
@@ -1634,17 +1631,22 @@ class Home extends StatelessWidget {
 
                */
 
+              //52.06=>https://www.youtube.com/watch?v=BCbO4iRNNsM
               String secret = "072f789acfee57e2c542da0d5169b4b8";
               var getTokenvalue = strg_getTokene;
+
+              /*
               var tokens = getTokenvalue.split(".");
               var header64 = tokens[0];
               var payload64 = tokens[1];
               Map payload = jsonDecode(utf8.decode(base64Decode(payload64)));
-              var sign64 = tokens[2];
+              var sign64 = tokens[2];*/
 
+              /*
               var hmac = Hmac(sha256, secret.codeUnits);
               var digest = hmac.convert("$header64.$payload64".codeUnits);
               var signGlobal = base64Encode(digest.bytes);
+              */
 
               var alertDialog = AlertDialog(
                 shape: RoundedRectangleBorder(
@@ -1656,14 +1658,9 @@ class Home extends StatelessWidget {
                   height: 400,
                   child: Column(
                     children: <Widget>[
-                      //strg_getTokene
-//                      Text(' content ' + strg_token),
-                      //+ strg_getTokene
-                      //+ header64 + payload64
-//                      Text("$header.$payload64.$sign"),
-//                      Text(strg_getTokene),
 //                      Text(header64 + " :: " + payload64 + " :: " + sign64),
-                      Text(signGlobal)
+//
+                      Text(getTokenvalue)
                     ],
                   ),
                 ),
