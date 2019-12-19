@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:crypto/crypto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_page_ui/main.dart' as login;
@@ -8,11 +5,13 @@ import 'package:flutter_login_page_ui/map.dart';
 import 'package:flutter_login_page_ui/worktime/atoffice.dart';
 import 'package:flutter_login_page_ui/worktime/atoffice2.dart';
 import 'package:intl/intl.dart';
+import 'package:jaguar_jwt/jaguar_jwt.dart';
 
 var strg_fullname = login.storage.getItem("stor_fullname");
 
 //SECRET_KEY=072f789acfee57e2c542da0d5169b4b8
-const String sharedSecret = '072f789acfee57e2c542da0d5169b4b8';
+const String sharedSecret = '072f789acfee57e2c542da0d5169b4b8'; //ถูก
+//const String sharedSecret = '1072f789acfee57e2c542da0d5169b4b8'; //ผิด
 
 //var strg_empCode = storage.getItem("stor_empCode");
 
@@ -66,6 +65,8 @@ class Home extends StatelessWidget {
     checkToken(context);
 //    print(" Storage token response : " + strg_token);
   }
+
+  Future TokenServer() {}
 
   Future msg() {
     var alertDialog = AlertDialog(
@@ -1608,71 +1609,64 @@ class Home extends StatelessWidget {
             case 0:
 
               /*
-              String secret = "072f789acfee57e2c542da0d5169b4b8";
-              //header
-              var header = {
-                "alg": "HS256",
-                "typ": "JWT",
-              };
-              String header64 = base64Encode(jsonEncode(header).codeUnits);
-              //payload clams
-              var payload = {
-                "sub": 1,
-                "name": "Rully Hetero",
-                "exp": DateTime.now().millisecondsSinceEpoch + 60000
-              };
-
-              String payload64 = base64Encode(jsonEncode(payload).codeUnits);
-
-              //assinatura
-              var hmac = Hmac(sha256, secret.codeUnits);
-              var digest = hmac.convert("$header64.$payload64".codeUnits);
-              String sign = base64Encode(digest.bytes);
-//              print("");
-
-//              print("selected Index : $index ");
-
-               */
-
               //52.06=>https://www.youtube.com/watch?v=BCbO4iRNNsM
               String secret = "072f789acfee57e2c542da0d5169b4b8";
               var getTokenvalue = strg_getTokene;
-
               var tokens = getTokenvalue.split(".");
               var header64 = tokens[0];
               var payload64 = tokens[1];
-//              Map payload = jsonDecode(utf8.decode(base64Decode(payload64)));
-              var sign64 = tokens[2];
-
               var hmac = Hmac(sha256, secret.codeUnits);
               var digest = hmac.convert("$header64.$payload64".codeUnits);
-
-//              var digest = hmac.convert("$header64.$payload64".codeUnits);
               var signGlobal = base64Encode(digest.bytes);
+              var sign64 = tokens[2];
+             */
 
-              var alertDialog = AlertDialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(15.0)),
+              //https://pub.dev/packages/jaguar_jwt#-example-tab-
+//              final tokensending = issueJwtHS256(strg_getTokene, sharedSecret);
+
+              try {
+                final decClaimSet =
+                    verifyJwtHS256Signature(strg_getTokene, sharedSecret);
+
+                if (decClaimSet.subject != null) {
+                  print('JWT ID: "${decClaimSet.jwtId}"');
+                }
+                if (decClaimSet.jwtId != null) {
+                  print('Subject: "${decClaimSet.subject}"');
+                }
+                if (decClaimSet.issuedAt != null) {
+                  print('Issued At: ${decClaimSet.issuedAt}');
+                }
+
+                var alertDialog = AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(15.0)),
 //              side: BorderSide(color: Colors.black)),
-                contentPadding: EdgeInsets.only(top: 0.0),
-                content: Container(
-                  width: 300,
-                  height: 400,
-                  child: Column(
-                    children: <Widget>[
-                      Text("$header64.$payload64.$sign64"),
-                      //Text(getTokenvalue)
-                    ],
+                  contentPadding: EdgeInsets.only(top: 0.0),
+                  content: Container(
+                    width: 300,
+                    height: 400,
+                    child: Column(
+                      children: <Widget>[
+//                      Text("$header64.$payload64.$sign64"),
+                        //Text(getTokenvalue)
+                        Text(decClaimSet.toString() +
+                            ',' +
+                            decClaimSet.issuedAt.toString())
+                      ],
+                    ),
                   ),
-                ),
 
-                title: Text('Server response'),
-              );
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return alertDialog;
-                  });
+                  title: Text('Server response'),
+                );
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return alertDialog;
+                    });
+              } on JwtException catch (e) {
+                print('Error: bad JWT: $e');
+              }
 
               break;
             case 1:
