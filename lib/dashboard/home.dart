@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_page_ui/main.dart' as login;
@@ -1641,9 +1644,11 @@ class Home extends StatelessWidget {
 //              Map payload = jsonDecode(utf8.decode(base64Decode(payload64)));
               var sign64 = tokens[2];
 
-//              var hmac = Hmac(sha256, secret.codeUnits);
+              var hmac = Hmac(sha256, secret.codeUnits);
+              var digest = hmac.convert("$header64.$payload64".codeUnits);
+
 //              var digest = hmac.convert("$header64.$payload64".codeUnits);
-//              var signGlobal = base64Encode(digest.bytes);
+              var signGlobal = base64Encode(digest.bytes);
 
               var alertDialog = AlertDialog(
                 shape: RoundedRectangleBorder(
