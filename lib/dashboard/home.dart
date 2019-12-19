@@ -64,9 +64,54 @@ class Home extends StatelessWidget {
   void initState() {
     checkToken(context);
 //    print(" Storage token response : " + strg_token);
+
+    TokenServer(); // ตรวจสอบ Token จาก server
   }
 
-  Future TokenServer() {}
+  void TokenServer() {
+    try {
+      var decClaimSet = verifyJwtHS256Signature(strg_getTokene, sharedSecret);
+
+      if (decClaimSet.subject != null) {
+        return print('JWT ID: "${decClaimSet.jwtId}"');
+      }
+      if (decClaimSet.jwtId != null) {
+        return print('Subject: "${decClaimSet.subject}"');
+      }
+      if (decClaimSet.issuedAt != null) {
+        return print('Issued At: ${decClaimSet.issuedAt}');
+      }
+
+      var alertDialog = AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(15.0)),
+//              side: BorderSide(color: Colors.black)),
+        contentPadding: EdgeInsets.only(top: 0.0),
+        content: Container(
+          width: 300,
+          height: 400,
+          child: Column(
+            children: <Widget>[
+//                      Text("$header64.$payload64.$sign64"),
+              //Text(getTokenvalue)
+              Text(decClaimSet.toString() +
+                  ',' +
+                  decClaimSet.issuedAt.toString())
+            ],
+          ),
+        ),
+
+        title: Text('Server response'),
+      );
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return alertDialog;
+          });
+    } on JwtException catch (e) {
+      print('Error: bad JWT: $e');
+    }
+  }
 
   Future msg() {
     var alertDialog = AlertDialog(
@@ -1607,23 +1652,11 @@ class Home extends StatelessWidget {
 //              print("selected Index : $index ");
           switch (index) {
             case 0:
+              TokenServer();
 
               /*
-              //52.06=>https://www.youtube.com/watch?v=BCbO4iRNNsM
-              String secret = "072f789acfee57e2c542da0d5169b4b8";
-              var getTokenvalue = strg_getTokene;
-              var tokens = getTokenvalue.split(".");
-              var header64 = tokens[0];
-              var payload64 = tokens[1];
-              var hmac = Hmac(sha256, secret.codeUnits);
-              var digest = hmac.convert("$header64.$payload64".codeUnits);
-              var signGlobal = base64Encode(digest.bytes);
-              var sign64 = tokens[2];
-             */
-
               //https://pub.dev/packages/jaguar_jwt#-example-tab-
 //              final tokensending = issueJwtHS256(strg_getTokene, sharedSecret);
-
               try {
                 final decClaimSet =
                     verifyJwtHS256Signature(strg_getTokene, sharedSecret);
@@ -1667,6 +1700,7 @@ class Home extends StatelessWidget {
               } on JwtException catch (e) {
                 print('Error: bad JWT: $e');
               }
+              */
 
               break;
             case 1:

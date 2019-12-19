@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login_page_ui/dashboard/home.dart' as prefix0;
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:jaguar_jwt/jaguar_jwt.dart';
 
 import '../main.dart';
 
@@ -46,6 +47,8 @@ var stor_str_ans = storage.getItem("stor_str_ans");
 
 var stor_area_status = storage.getItem("stor_area_status"); //1=อยู่ใน,0=อยู่นอก
 
+var strg_getTokene = storage.getItem("stor_getToken"); //Token ทั้งหมด
+
 var area_status; //1=อยู่ในพื้นที่,0=อยู่นอกพื้นที่
 
 var VERIFYCODE; //0=เข้า,1=ออก
@@ -64,7 +67,7 @@ var CHECKTIME_serve; //เรียกเวลาที่ลงเวลาท
 var totalhours_serve; //จำนวนชั่วโมงในการทำงาน
 
 //http://http://10.3.42.61:3008/checkinout/Badge/4697
-var ip2 = "http://10.3.42.163:3008/";
+var ip2 = "http://10.3.42.61:3008/";
 
 //http://10.3.42.163:3008/checkinout/Badge/4697  =>limit main list
 /*
@@ -108,6 +111,10 @@ List jsonlist = []; //=>เอาไปใช้งาน ใน foreach json
 
 List jsonexpirelist = []; // json emie expire
 
+const String sharedSecret = '072f789acfee57e2c542da0d5169b4b8'; //ถูก
+
+var decClaimSet;
+
 class Atoffice2 extends StatefulWidget {
   @override
   _Atoffice2State createState() => _Atoffice2State();
@@ -138,6 +145,8 @@ class _Atoffice2State extends State<Atoffice2> {
     "enddate": date1.toString()
     }
     */
+
+    //ตรวจสอบ Token
   }
 
   Future checkOutTime() async {
@@ -573,6 +582,47 @@ class _Atoffice2State extends State<Atoffice2> {
                             getExpire(); //check date expire
                             checkdateExpire();
                             checkOutTime();
+
+                            // check Token จาก server
+
+                            //https://pub.dev/packages/jaguar_jwt#-example-tab-
+                            decClaimSet = verifyJwtHS256Signature(
+                                strg_getTokene, sharedSecret);
+
+                            if ((decClaimSet.subject != null) ||
+                                (decClaimSet.jwtId != null) ||
+                                (decClaimSet.issuedAt != null)) {
+                              //------ alert---------
+                              var alertDialog = AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(15.0)),
+//              side: BorderSide(color: Colors.black)),
+                                contentPadding: EdgeInsets.only(top: 0.0),
+                                content: Container(
+                                  width: 300,
+                                  height: 400,
+                                  child: Column(
+                                    children: <Widget>[
+//                      Text("$header64.$payload64.$sign64"),
+                                      //Text(getTokenvalue)
+                                      Text(decClaimSet.toString() +
+                                          ',' +
+                                          decClaimSet.issuedAt.toString())
+                                    ],
+                                  ),
+                                ),
+
+                                title: Text('Server response'),
+                              );
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return alertDialog;
+                                  });
+                              //------ alert---------
+
+                            }
                           },
                           color: Colors.green,
                           icon: Icon(
