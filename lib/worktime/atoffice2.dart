@@ -791,9 +791,23 @@ class _Atoffice2State extends State<Atoffice2> {
                                         builder: (context) => MyApp()));
                               }
                             },
-                            color: Colors.green,
+                            color: Colors.black,
                             icon: Icon(
-                              Icons.loop, //refresh
+                              Icons.refresh, //refresh
+                              size: 40,
+                            ),
+                            disabledColor: Colors.red,
+                            highlightColor: Colors.black,
+                          )),
+                      Container(
+                          width: 55.0,
+                          height: 55.0,
+//                          color: Colors.white,
+                          child: IconButton(
+                            onPressed: () {},
+                            color: Colors.black,
+                            icon: Icon(
+                              Icons.skip_next, //refresh
                               size: 40,
                             ),
                             disabledColor: Colors.red,
