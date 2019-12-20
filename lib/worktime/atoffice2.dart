@@ -101,6 +101,7 @@ List<Map<String, dynamic>> arrinout = [];
 final String url_userinfo = ip2 + "userinfo/" + strg_employeeNo;
 
 //http://10.3.42.163:3008/checkinout/Badge/4697
+// http://10.3.42.61:3008/checkinout/BadgeOffset/4697
 final urlJSONString = ip2 + "checkinout/Badge/" + server_Badgenumber;
 
 var server_Badgenumber; // Badgenumber ของพนักงาน
@@ -605,6 +606,12 @@ class _Atoffice2State extends State<Atoffice2> {
               alignment: Alignment.topCenter,
               child: Column(
                 children: <Widget>[
+                  SizedBox(
+                    width: 200.0,
+                    height: 5.0,
+                  ),
+
+                  /*
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     mainAxisSize: MainAxisSize.max,
@@ -726,11 +733,72 @@ class _Atoffice2State extends State<Atoffice2> {
                       ),
                     ],
                   ),
+                  */
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      Container(
+                          width: 55.0,
+                          height: 55.0,
+//                          color: Colors.white,
+                          child: IconButton(
+                            onPressed: () {
+                              //https://pub.dev/packages/jaguar_jwt#-example-tab-
+                              // token checkout
+                              try {
+                                decClaimSet = verifyJwtHS256Signature(
+                                    strg_getTokene, sharedSecret);
+
+                                if ((decClaimSet.subject != null) ||
+                                    (decClaimSet.jwtId != null) ||
+                                    (decClaimSet.issuedAt != null)) {}
+                              } on JwtException catch (e) {
+                                print('Error: bad JWT: $e');
+
+                                //------ alert---------
+                                var alertDialog = AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(15.0)),
+//              side: BorderSide(color: Colors.black)),
+                                  contentPadding: EdgeInsets.only(top: 0.0),
+                                  content: Container(
+                                    width: 300,
+                                    height: 50,
+                                    child: Column(
+                                      children: <Widget>[
+//                      Text("$header64.$payload64.$sign64"),
+                                        Text(' กรุณา Login อีกครั้ง ')
+                                      ],
+                                    ),
+                                  ),
+
+                                  title: Text(' Token หมดอายุ '),
+                                );
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return alertDialog;
+                                    });
+                                //------ alert---------
+
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MyApp()));
+                              }
+                            },
+                            color: Colors.green,
+                            icon: Icon(
+                              Icons.loop, //refresh
+                              size: 40,
+                            ),
+                            disabledColor: Colors.red,
+                            highlightColor: Colors.black,
+                          )),
                       Container(
                         width: 130.0,
                         height: 60.0,

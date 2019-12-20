@@ -677,6 +677,7 @@ class Home extends StatelessWidget {
                   /*  Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => SecondRoute()));*/
 
+                  //---- token check expire -------
                   // token checkout
                   try {
                     decClaimSet =
@@ -684,7 +685,10 @@ class Home extends StatelessWidget {
 
                     if ((decClaimSet.subject != null) ||
                         (decClaimSet.jwtId != null) ||
-                        (decClaimSet.issuedAt != null)) {}
+                        (decClaimSet.issuedAt != null)) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => RouteAtoffice2()));
+                    }
                   } on JwtException catch (e) {
                     print('Error: bad JWT: $e');
 
@@ -718,9 +722,6 @@ class Home extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => MyApp()));
                   }
                   // token checkout
-
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => RouteAtoffice2()));
                 },
               ),
             ),
