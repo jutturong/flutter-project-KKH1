@@ -113,7 +113,7 @@ List jsonexpirelist = []; // json emie expire
 
 //const String sharedSecret = '072f789acfee57e2c542da0d5169b4b8'; //ถูก
 
-const String sharedSecret = '1072f789acfee57e2c542da0d5169b4b8'; //ถูก
+const String sharedSecret = '072f789acfee57e2c542da0d5169b4b8'; //ถูก
 
 var decClaimSet;
 
@@ -153,6 +153,49 @@ class _Atoffice2State extends State<Atoffice2> {
 //    TokenLogout();
 
     //https://pub.dev/packages/jaguar_jwt#-example-tab-
+
+    // token checkout
+    /*
+    try {
+      decClaimSet = verifyJwtHS256Signature(strg_getTokene, sharedSecret);
+
+      if ((decClaimSet.subject != null) ||
+          (decClaimSet.jwtId != null) ||
+          (decClaimSet.issuedAt != null)) {}
+    } on JwtException catch (e) {
+      print('Error: bad JWT: $e');
+
+      //------ alert---------
+      var alertDialog = AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(15.0)),
+//              side: BorderSide(color: Colors.black)),
+        contentPadding: EdgeInsets.only(top: 0.0),
+        content: Container(
+          width: 300,
+          height: 50,
+          child: Column(
+            children: <Widget>[
+//                      Text("$header64.$payload64.$sign64"),
+              Text(' กรุณา Login อีกครั้ง ')
+            ],
+          ),
+        ),
+
+        title: Text(' Token หมดอายุ '),
+      );
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return alertDialog;
+          });
+      //------ alert---------
+
+      Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+    }
+    */
+
+    // token checkout
   }
 
   Future checkOutTime() async {

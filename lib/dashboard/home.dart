@@ -5,13 +5,11 @@ import 'package:flutter_login_page_ui/map.dart';
 import 'package:flutter_login_page_ui/worktime/atoffice.dart';
 import 'package:flutter_login_page_ui/worktime/atoffice2.dart';
 import 'package:intl/intl.dart';
-import 'package:jaguar_jwt/jaguar_jwt.dart';
 
 var strg_fullname = login.storage.getItem("stor_fullname");
 
 //SECRET_KEY=072f789acfee57e2c542da0d5169b4b8
 const String sharedSecret = '072f789acfee57e2c542da0d5169b4b8'; //ถูก
-//const String sharedSecret = '1072f789acfee57e2c542da0d5169b4b8'; //ผิด
 
 //var strg_empCode = storage.getItem("stor_empCode");
 
@@ -46,6 +44,10 @@ String formattedDate = DateFormat('yyyy-MM-dd hh:mm:ss').format(now);
 //Token => https://www.youtube.com/watch?v=BCbO4iRNNsM
 var getToken = ""; //คืนค่า Token จาก login
 
+//const String sharedSecret = '072f789acfee57e2c542da0d5169b4b8'; //ถูก
+
+var decClaimSet;
+
 var rountworking =
     new MaterialPageRoute(builder: (BuildContext context) => new SecondRoute());
 
@@ -65,52 +67,7 @@ class Home extends StatelessWidget {
     checkToken(context);
 //    print(" Storage token response : " + strg_token);
 
-    TokenServer(); // ตรวจสอบ Token จาก server
-  }
-
-  void TokenServer() {
-    try {
-      var decClaimSet = verifyJwtHS256Signature(strg_getTokene, sharedSecret);
-
-      if (decClaimSet.subject != null) {
-        return print('JWT ID: "${decClaimSet.jwtId}"');
-      }
-      if (decClaimSet.jwtId != null) {
-        return print('Subject: "${decClaimSet.subject}"');
-      }
-      if (decClaimSet.issuedAt != null) {
-        return print('Issued At: ${decClaimSet.issuedAt}');
-      }
-
-      var alertDialog = AlertDialog(
-        shape: RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(15.0)),
-//              side: BorderSide(color: Colors.black)),
-        contentPadding: EdgeInsets.only(top: 0.0),
-        content: Container(
-          width: 300,
-          height: 400,
-          child: Column(
-            children: <Widget>[
-//                      Text("$header64.$payload64.$sign64"),
-              //Text(getTokenvalue)
-              Text(decClaimSet.toString() +
-                  ',' +
-                  decClaimSet.issuedAt.toString())
-            ],
-          ),
-        ),
-
-        title: Text('Server response'),
-      );
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return alertDialog;
-          });
-    } on JwtException catch (e) {
-      print('Error: bad JWT: $e');
-    }
+    // ตรวจสอบ Token จาก server
   }
 
   Future msg() {
@@ -1652,7 +1609,6 @@ class Home extends StatelessWidget {
 //              print("selected Index : $index ");
           switch (index) {
             case 0:
-              TokenServer();
 
               /*
               //https://pub.dev/packages/jaguar_jwt#-example-tab-
