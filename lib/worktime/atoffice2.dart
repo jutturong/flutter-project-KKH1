@@ -69,7 +69,7 @@ var totalhours_serve; //จำนวนชั่วโมงในการท�
 //http://http://10.3.42.61:3008/checkinout/Badge/4697
 var ip2 = "http://10.3.42.61:3008/";
 
-//http://10.3.42.163:3008/checkinout/Badge/4697  =>limit main list
+//http://10.3.42.163:3008/checkinout/Badge/4697  =>limit main list  8
 /*
  querybadgenumber(knex: Knex, Badgenumber: string){
       return knex(this.tableName    )
@@ -804,7 +804,9 @@ class _Atoffice2State extends State<Atoffice2> {
                           height: 55.0,
 //                          color: Colors.white,
                           child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              getChckinoutOfset(context);
+                            },
                             color: Colors.black,
                             icon: Icon(
                               Icons.skip_next, //refresh
@@ -844,7 +846,19 @@ class _Atoffice2State extends State<Atoffice2> {
 
                               if ((decClaimSet.subject != null) ||
                                   (decClaimSet.jwtId != null) ||
-                                  (decClaimSet.issuedAt != null)) {}
+                                  (decClaimSet.issuedAt != null)) {
+                                if (expireStatus.toString().trim() == '[]') {
+                                  VERIFYCODE = 0; //0=เข้าทำงาน,1=เลิกงาน
+                                  sendInsert(context); //ส่งค่าทำการบันทึก
+                                  callIdBadge();
+//                           emieexpire(context);
+
+//                              msg('server', expireStatus.toString().trim());
+                                } else {
+                                  msg('ไม่สามารถลงเวลาได้',
+                                      'สถานะ EMIE หมดอายุ ');
+                                }
+                              }
                             } on JwtException catch (e) {
                               print('Error: bad JWT: $e');
 
@@ -883,8 +897,7 @@ class _Atoffice2State extends State<Atoffice2> {
                             // token checkout
                             //----- token check expire ------
 
-                            /*
-                            if (expireStatus.toString().trim() == '[]') {
+                            /* if (expireStatus.toString().trim() == '[]') {
                               VERIFYCODE = 0; //0=เข้าทำงาน,1=เลิกงาน
                               sendInsert(context); //ส่งค่าทำการบันทึก
                               callIdBadge();
@@ -893,8 +906,7 @@ class _Atoffice2State extends State<Atoffice2> {
 //                              msg('server', expireStatus.toString().trim());
                             } else {
                               msg('ไม่สามารถลงเวลาได้', 'สถานะ EMIE หมดอายุ ');
-                            }
-                            */
+                            }*/
                           },
                           child: Text(
                             'เข้า',
@@ -1090,6 +1102,33 @@ class _Atoffice2State extends State<Atoffice2> {
         });
   }
   */
+
+  // เรียก checkinout offset
+  Future getChckinoutOfset(BuildContext context) async {
+    var url_Ofset = ip2 + "checkinout/BadgeOffset/" + server_Badgenumber;
+    final headers = {'Content-Type': 'application/json'};
+    final response2 = await http.get(
+      url_Ofset,
+      headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+    );
+    var jsonDecoded2 = json.decode(response2.body);
+    var rows = jsonDecoded2['rows'];
+
+    setState(() {
+      jsonlist = jsonDecoded2['rows'];
+    });
+
+    /*
+    var alertDialog = AlertDialog(
+      title: Text('Response Status'),
+      content: Text(rows.toString()),
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alertDialog;
+        });*/
+  }
 
   Future getChckinout(BuildContext context) async {
     if (stor_checkInKKH) {
