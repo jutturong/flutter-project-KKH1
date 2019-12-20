@@ -54,6 +54,17 @@ storage.setItem("stor_str_ans", "" );
 storage.setItem("stor_area_status", "" );
    */
 
+/*
+  /*
+                               logout
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MyApp()));
+                                */
+
+   */
+
 //var SECRET_KEY = '072f789acfee57e2c542da0d5169b4b8';
 
 var url = "http://iconnect.kkh.go.th:3008/login/old-user";

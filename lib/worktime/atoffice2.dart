@@ -111,7 +111,9 @@ List jsonlist = []; //=>เอาไปใช้งาน ใน foreach json
 
 List jsonexpirelist = []; // json emie expire
 
-const String sharedSecret = '072f789acfee57e2c542da0d5169b4b8'; //ถูก
+//const String sharedSecret = '072f789acfee57e2c542da0d5169b4b8'; //ถูก
+
+const String sharedSecret = '1072f789acfee57e2c542da0d5169b4b8'; //ถูก
 
 var decClaimSet;
 
@@ -147,6 +149,8 @@ class _Atoffice2State extends State<Atoffice2> {
     */
 
     //ตรวจสอบ Token
+
+    TokenLogout();
   }
 
   Future checkOutTime() async {
@@ -583,15 +587,48 @@ class _Atoffice2State extends State<Atoffice2> {
                             checkdateExpire();
                             checkOutTime();
 
-                            // check Token จาก server
-
+                            TokenLogout(); //ตรวจสอบ Token
+                            /*
                             //https://pub.dev/packages/jaguar_jwt#-example-tab-
-                            decClaimSet = verifyJwtHS256Signature(
-                                strg_getTokene, sharedSecret);
+                            try {
+                              decClaimSet = verifyJwtHS256Signature(
+                                  strg_getTokene, sharedSecret);
 
-                            if ((decClaimSet.subject != null) ||
-                                (decClaimSet.jwtId != null) ||
-                                (decClaimSet.issuedAt != null)) {
+                              if ((decClaimSet.subject != null) ||
+                                  (decClaimSet.jwtId != null) ||
+                                  (decClaimSet.issuedAt != null)) {
+                                //------ alert---------
+                                var alertDialog = AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          new BorderRadius.circular(15.0)),
+//              side: BorderSide(color: Colors.black)),
+                                  contentPadding: EdgeInsets.only(top: 0.0),
+                                  content: Container(
+                                    width: 300,
+                                    height: 300,
+                                    child: Column(
+                                      children: <Widget>[
+//                      Text("$header64.$payload64.$sign64"),
+                                        //Text(getTokenvalue)
+                                        Text(decClaimSet.toString())
+                                      ],
+                                    ),
+                                  ),
+
+                                  title: Text(' Token Response '),
+                                );
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return alertDialog;
+                                    });
+                                //------ alert---------
+
+                              }
+                            } on JwtException catch (e) {
+                              print('Error: bad JWT: $e');
+
                               //------ alert---------
                               var alertDialog = AlertDialog(
                                 shape: RoundedRectangleBorder(
@@ -601,19 +638,16 @@ class _Atoffice2State extends State<Atoffice2> {
                                 contentPadding: EdgeInsets.only(top: 0.0),
                                 content: Container(
                                   width: 300,
-                                  height: 400,
+                                  height: 100,
                                   child: Column(
                                     children: <Widget>[
 //                      Text("$header64.$payload64.$sign64"),
-                                      //Text(getTokenvalue)
-                                      Text(decClaimSet.toString() +
-                                          ',' +
-                                          decClaimSet.issuedAt.toString())
+                                      Text(' Token หมดอายุ ')
                                     ],
                                   ),
                                 ),
 
-                                title: Text('Server response'),
+                                title: Text(' Server response '),
                               );
                               showDialog(
                                   context: context,
@@ -622,7 +656,12 @@ class _Atoffice2State extends State<Atoffice2> {
                                   });
                               //------ alert---------
 
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MyApp()));
                             }
+                            */
                           },
                           color: Colors.green,
                           icon: Icon(
@@ -1553,6 +1592,55 @@ class _Atoffice2State extends State<Atoffice2> {
             });
       }
     }
+  }
+
+  void TokenLogout() //ตรวจสอบว่า Token หมดอายุหรืิอยัง
+  {
+//    print('token check');
+
+    try {
+      /*
+      if ((decClaimSet.subject != null) ||
+          (decClaimSet.jwtId != null) ||
+          (decClaimSet.issuedAt != null)) {
+        print(" token success ! ");
+      }*/
+
+//      if ((decClaimSet.subject != null) || (decClaimSet.jwtId != null)) {}
+//      decClaimSet = verifyJwtHS256Signature(strg_getTokene, sharedSecret);
+    } on JwtException catch (e) {
+      print('Error: bad JWT: $e');
+
+      Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+    }
+    //------ alert---------
+    /*
+    var alertDialog = AlertDialog(
+      shape:
+          RoundedRectangleBorder(borderRadius: new BorderRadius.circular(15.0)),
+//              side: BorderSide(color: Colors.black)),
+      contentPadding: EdgeInsets.only(top: 0.0),
+      content: Container(
+        width: 300,
+        height: 100,
+        child: Column(
+          children: <Widget>[
+//                      Text("$header64.$payload64.$sign64"),
+            Text(' Test Token ')
+          ],
+        ),
+      ),
+
+      title: Text(' Test Token '),
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alertDialog;
+        });
+
+       */
+    //------ alert---------
   }
 
   Future msg(String title, String childtxt) {
