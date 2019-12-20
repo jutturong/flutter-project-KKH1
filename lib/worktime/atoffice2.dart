@@ -150,7 +150,9 @@ class _Atoffice2State extends State<Atoffice2> {
 
     //ตรวจสอบ Token
 
-    TokenLogout();
+//    TokenLogout();
+
+    //https://pub.dev/packages/jaguar_jwt#-example-tab-
   }
 
   Future checkOutTime() async {
@@ -587,45 +589,17 @@ class _Atoffice2State extends State<Atoffice2> {
                             checkdateExpire();
                             checkOutTime();
 
-                            TokenLogout(); //ตรวจสอบ Token
-                            /*
+//
+
                             //https://pub.dev/packages/jaguar_jwt#-example-tab-
+                            // token checkout
                             try {
                               decClaimSet = verifyJwtHS256Signature(
                                   strg_getTokene, sharedSecret);
 
                               if ((decClaimSet.subject != null) ||
                                   (decClaimSet.jwtId != null) ||
-                                  (decClaimSet.issuedAt != null)) {
-                                //------ alert---------
-                                var alertDialog = AlertDialog(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          new BorderRadius.circular(15.0)),
-//              side: BorderSide(color: Colors.black)),
-                                  contentPadding: EdgeInsets.only(top: 0.0),
-                                  content: Container(
-                                    width: 300,
-                                    height: 300,
-                                    child: Column(
-                                      children: <Widget>[
-//                      Text("$header64.$payload64.$sign64"),
-                                        //Text(getTokenvalue)
-                                        Text(decClaimSet.toString())
-                                      ],
-                                    ),
-                                  ),
-
-                                  title: Text(' Token Response '),
-                                );
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return alertDialog;
-                                    });
-                                //------ alert---------
-
-                              }
+                                  (decClaimSet.issuedAt != null)) {}
                             } on JwtException catch (e) {
                               print('Error: bad JWT: $e');
 
@@ -638,16 +612,16 @@ class _Atoffice2State extends State<Atoffice2> {
                                 contentPadding: EdgeInsets.only(top: 0.0),
                                 content: Container(
                                   width: 300,
-                                  height: 100,
+                                  height: 50,
                                   child: Column(
                                     children: <Widget>[
 //                      Text("$header64.$payload64.$sign64"),
-                                      Text(' Token หมดอายุ ')
+                                      Text(' กรุณา Login อีกครั้ง ')
                                     ],
                                   ),
                                 ),
 
-                                title: Text(' Server response '),
+                                title: Text(' Token หมดอายุ '),
                               );
                               showDialog(
                                   context: context,
@@ -661,7 +635,6 @@ class _Atoffice2State extends State<Atoffice2> {
                                   MaterialPageRoute(
                                       builder: (context) => MyApp()));
                             }
-                            */
                           },
                           color: Colors.green,
                           icon: Icon(
@@ -738,6 +711,54 @@ class _Atoffice2State extends State<Atoffice2> {
 
 //                            msg('response', expireStatus.toString());
 
+                            //---- token check expire -------
+                            // token checkout
+                            try {
+                              decClaimSet = verifyJwtHS256Signature(
+                                  strg_getTokene, sharedSecret);
+
+                              if ((decClaimSet.subject != null) ||
+                                  (decClaimSet.jwtId != null) ||
+                                  (decClaimSet.issuedAt != null)) {}
+                            } on JwtException catch (e) {
+                              print('Error: bad JWT: $e');
+
+                              //------ alert---------
+                              var alertDialog = AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(15.0)),
+//              side: BorderSide(color: Colors.black)),
+                                contentPadding: EdgeInsets.only(top: 0.0),
+                                content: Container(
+                                  width: 300,
+                                  height: 50,
+                                  child: Column(
+                                    children: <Widget>[
+//                      Text("$header64.$payload64.$sign64"),
+                                      Text(' กรุณา Login อีกครั้ง ')
+                                    ],
+                                  ),
+                                ),
+
+                                title: Text(' Token หมดอายุ '),
+                              );
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return alertDialog;
+                                  });
+                              //------ alert---------
+
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MyApp()));
+                            }
+                            // token checkout
+                            //----- token check expire ------
+
+                            /*
                             if (expireStatus.toString().trim() == '[]') {
                               VERIFYCODE = 0; //0=เข้าทำงาน,1=เลิกงาน
                               sendInsert(context); //ส่งค่าทำการบันทึก
@@ -748,6 +769,7 @@ class _Atoffice2State extends State<Atoffice2> {
                             } else {
                               msg('ไม่สามารถลงเวลาได้', 'สถานะ EMIE หมดอายุ ');
                             }
+                            */
                           },
                           child: Text(
                             'เข้า',
