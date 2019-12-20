@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_page_ui/main.dart' as login;
+import 'package:flutter_login_page_ui/main.dart';
 import 'package:flutter_login_page_ui/map.dart';
 import 'package:flutter_login_page_ui/worktime/atoffice.dart';
 import 'package:flutter_login_page_ui/worktime/atoffice2.dart';
 import 'package:intl/intl.dart';
+import 'package:jaguar_jwt/jaguar_jwt.dart';
 
 var strg_fullname = login.storage.getItem("stor_fullname");
 
@@ -674,6 +676,48 @@ class Home extends StatelessWidget {
 
                   /*  Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => SecondRoute()));*/
+
+                  // token checkout
+                  try {
+                    decClaimSet =
+                        verifyJwtHS256Signature(strg_getTokene, sharedSecret);
+
+                    if ((decClaimSet.subject != null) ||
+                        (decClaimSet.jwtId != null) ||
+                        (decClaimSet.issuedAt != null)) {}
+                  } on JwtException catch (e) {
+                    print('Error: bad JWT: $e');
+
+                    //------ alert---------
+                    var alertDialog = AlertDialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(15.0)),
+//              side: BorderSide(color: Colors.black)),
+                      contentPadding: EdgeInsets.only(top: 0.0),
+                      content: Container(
+                        width: 300,
+                        height: 50,
+                        child: Column(
+                          children: <Widget>[
+//                      Text("$header64.$payload64.$sign64"),
+                            Text(' กรุณา Login อีกครั้ง ')
+                          ],
+                        ),
+                      ),
+
+                      title: Text(' Token หมดอายุ '),
+                    );
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return alertDialog;
+                        });
+                    //------ alert---------
+
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyApp()));
+                  }
+                  // token checkout
 
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => RouteAtoffice2()));
