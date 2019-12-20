@@ -799,6 +799,8 @@ class _Atoffice2State extends State<Atoffice2> {
                             disabledColor: Colors.red,
                             highlightColor: Colors.black,
                           )),
+
+                      /*
                       Container(
                           width: 55.0,
                           height: 55.0,
@@ -815,6 +817,8 @@ class _Atoffice2State extends State<Atoffice2> {
                             disabledColor: Colors.red,
                             highlightColor: Colors.black,
                           )),
+                      */
+
                       Container(
                         width: 130.0,
                         height: 60.0,
